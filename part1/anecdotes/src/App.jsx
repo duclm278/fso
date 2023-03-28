@@ -1,17 +1,6 @@
 import { useState } from "react";
 import "./App.css";
 
-const getRandomInt = (max) => Math.floor(Math.random() * max);
-
-const Anecdote = ({ anecdotes, index, points }) => (
-  <>
-    <div>{anecdotes[index]}</div>
-    <div>
-      has {points[index]} {points[index] === 1 ? "vote" : "votes"}
-    </div>
-  </>
-);
-
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -24,30 +13,48 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const getRandomAnecdotes = () => getRandomInt(anecdotes.length);
+  const getRandomInt = (max) => Math.floor(Math.random() * max);
+  const getRandomAnecdote = () => getRandomInt(anecdotes.length);
 
   // Lazy state initialization
-  const [selected, setSelected] = useState(() => getRandomAnecdotes());
-  const [points, setPoints] = useState(() => new Uint8Array(anecdotes.length));
-  const indexMostVotes = points.indexOf(Math.max(...points));
+  const [selected, setSelected] = useState(() => getRandomAnecdote());
+  const [mostVotes, setMostVotes] = useState(selected);
+  const [votes, setVotes] = useState(() => new Uint8Array(anecdotes.length));
+
+  const getNextRandomAnecdote = () => {
+    while (true) {
+      const possibleNext = getRandomAnecdote();
+      if (possibleNext !== selected) return possibleNext;
+    }
+  };
 
   const handleVote = () => {
-    const newPoints = [...points];
-    newPoints[selected]++;
-    setPoints(newPoints);
+    const newVotes = [...votes];
+    newVotes[selected]++;
+    setVotes(newVotes);
+
+    if (newVotes[mostVotes] < newVotes[selected]) {
+      setMostVotes(selected);
+    }
   };
 
   return (
     <>
       <h2>Anecdote of the day</h2>
-      <Anecdote anecdotes={anecdotes} index={selected} points={points} />
-      <button onClick={() => handleVote()}>vote</button>
-      <button onClick={() => setSelected(getRandomAnecdotes)}>
+      <div>{anecdotes[selected]}</div>
+      <div>
+        has {votes[selected]} {votes[selected] === 1 ? "vote" : "votes"}
+      </div>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={() => setSelected(getNextRandomAnecdote)}>
         next anecdote
       </button>
 
       <h2>Anecdote with most votes</h2>
-      <Anecdote anecdotes={anecdotes} index={indexMostVotes} points={points} />
+      <div>{anecdotes[mostVotes]}</div>
+      <div>
+        has {votes[mostVotes]} {votes[mostVotes] === 1 ? "vote" : "votes"}
+      </div>
     </>
   );
 };

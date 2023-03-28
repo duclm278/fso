@@ -1,35 +1,35 @@
 import { useState } from "react";
 import "./App.css";
 
-const Part = (props) => {
+const Part = ({ part }) => {
   return (
     <p>
-      {props.part.name} {props.part.exercises}
+      {part.name} {part.exercises}
     </p>
   );
 };
 
-const Total = (props) => {
+const Total = ({ parts }) => {
   return (
     <p>
       Number of exercises{" "}
-      {props.parts.reduce((prev, curr) => prev + curr.exercises, 0)}
+      {parts.reduce((prev, curr) => prev + curr.exercises, 0)}
     </p>
   );
 };
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <>
-      {props.parts.map((part, index) => (
+      {parts.map((part, index) => (
         <Part key={index} part={part} />
       ))}
     </>
   );
 };
 
-const Header = (props) => {
-  return <h1>{props.name}</h1>;
+const Header = ({ name }) => {
+  return <h1>{name}</h1>;
 };
 
 const App = () => {
