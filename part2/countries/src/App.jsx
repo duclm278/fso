@@ -8,15 +8,12 @@ const Country = ({ country }) => {
 
   useEffect(() => {
     if (!country.capital) return;
-
+    const capitalName = country.capital?.[0];
+    const countryCode = country.cca2;
     weatherService
-      .getByCityName(country.capital?.[0])
+      .getByCityName(capitalName, countryCode)
       .then((returnedWeather) => {
-        console.log(returnedWeather);
         setNowcast(returnedWeather);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }, []);
 
@@ -57,14 +54,9 @@ const App = () => {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    countryService
-      .getAll()
-      .then((returnedCountries) => {
-        setCountries(returnedCountries);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    countryService.getAll().then((returnedCountries) => {
+      setCountries(returnedCountries);
+    });
   }, []);
 
   const changeFilter = (event) => {

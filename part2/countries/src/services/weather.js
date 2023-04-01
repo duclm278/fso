@@ -8,9 +8,19 @@ const getIconUrl = (icon) => {
   return `https://openweathermap.org/img/wn/${icon}@2x.png`;
 };
 
-const getByCityName = (cityName) => {
+const getByCityName = (cityName, stateCode, countryCode) => {
+  let query = cityName;
+  if (stateCode) query += `,${stateCode}`;
+  if (countryCode) query += `,${countryCode}`;
   const request = axios.get(
-    `${baseUrl}?q=${cityName}&appid=${API_KEY}&units=metric`
+    `${baseUrl}?q=${query}&units=metric&appid=${API_KEY}`
+  );
+  return request.then((response) => response.data);
+};
+
+const getByLatLng = (lat, lng) => {
+  const request = axios.get(
+    `${baseUrl}?lat=${lat}&lon=${lng}&units=metric&appid=${API_KEY}`
   );
   return request.then((response) => response.data);
 };
@@ -18,4 +28,5 @@ const getByCityName = (cityName) => {
 export default {
   getIconUrl,
   getByCityName,
+  getByLatLng,
 };
