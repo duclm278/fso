@@ -12,8 +12,8 @@ const Country = ({ country }) => {
     const countryCode = country.cca2;
     weatherService
       .getByCityName(capitalName, countryCode)
-      .then((returnedWeather) => {
-        setNowcast(returnedWeather);
+      .then((returnedNowcast) => {
+        setNowcast(returnedNowcast);
       });
   }, []);
 
