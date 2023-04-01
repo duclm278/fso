@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import "./App.css";
 import Notification from "./components/Notification";
 import personService from "./services/persons";
-import "./App.css";
 
 const Persons = ({ persons, setPersons, setAlertType, setAlertMessage }) => {
   const handleDelete = (selected) => {
@@ -99,35 +99,12 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    const nameFound = persons.find((person) => person.name === newName);
-    const numberFound = persons.find((person) => person.number === newNumber);
+    const foundByName = persons.find((person) => person.name === newName);
+    const foundByNumber = persons.find((person) => person.number === newNumber);
 
-    if (nameFound) {
-      if (
-        confirm(
-          `${newName} is already added to phonebook, replace old number with new one?`
-        )
-      ) {
-        const newPerson = {
-          name: newName,
-          number: newNumber,
-        };
-
-        personService.update(nameFound.id, newPerson).then((returnedPerson) => {
-          setPersons(
-            persons.map((p) => (p.id !== nameFound.id ? p : returnedPerson))
-          );
-          setNewName("");
-          setNewNumber("");
-          setAlertType("success");
-          setAlertMessage(`Updated to ${returnedPerson.number}`);
-          setTimeout(() => {
-            setAlertType(null);
-            setAlertMessage(null);
-          }, 5000);
-        });
-      }
-    } else if (numberFound) {
+    if (foundByName) {
+      updatePerson(foundByName);
+    } else if (foundByNumber) {
       alert(`${newNumber} is already added to phonebook`);
     } else if (!newName || !newNumber) {
       alert(`Found empty field`);
@@ -143,6 +120,33 @@ const App = () => {
         setNewNumber("");
         setAlertType("success");
         setAlertMessage(`Added ${returnedPerson.name}`);
+        setTimeout(() => {
+          setAlertType(null);
+          setAlertMessage(null);
+        }, 5000);
+      });
+    }
+  };
+
+  const updatePerson = (person) => {
+    if (
+      confirm(
+        `${newName} is already added to phonebook, replace old number with new one?`
+      )
+    ) {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      };
+
+      personService.update(person.id, newPerson).then((returnedPerson) => {
+        setPersons(
+          persons.map((p) => (p.id !== person.id ? p : returnedPerson))
+        );
+        setNewName("");
+        setNewNumber("");
+        setAlertType("success");
+        setAlertMessage(`Updated to ${returnedPerson.number}`);
         setTimeout(() => {
           setAlertType(null);
           setAlertMessage(null);

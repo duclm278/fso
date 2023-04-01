@@ -12,16 +12,14 @@ const getByCityName = (cityName, stateCode, countryCode) => {
   let query = cityName;
   if (stateCode) query += `,${stateCode}`;
   if (countryCode) query += `,${countryCode}`;
-  const request = axios.get(
-    `${baseUrl}?q=${query}&units=metric&appid=${API_KEY}`
-  );
+  const url = `${baseUrl}?q=${query}&units=metric&appid=${API_KEY}`;
+  const request = axios.get(url);
   return request.then((response) => response.data);
 };
 
 const getByLatLng = (lat, lng) => {
-  const request = axios.get(
-    `${baseUrl}?lat=${lat}&lon=${lng}&units=metric&appid=${API_KEY}`
-  );
+  const url = `${baseUrl}?lat=${lat}&lon=${lng}&units=metric&appid=${API_KEY}`;
+  const request = axios.get(url);
   return request.then((response) => response.data);
 };
 

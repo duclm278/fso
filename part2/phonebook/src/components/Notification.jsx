@@ -1,8 +1,5 @@
 const Notification = ({ type, message }) => {
-  if (!type || !message) {
-    return null;
-  }
-
+  if (!type || !message) return null;
   return <div className={`notification ${type}`}>{message}</div>;
 };
 
