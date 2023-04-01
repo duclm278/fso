@@ -1,19 +1,19 @@
 import { useState } from "react";
 import "./App.css";
 
-const Part = ({ part }) => {
-  return (
-    <p>
-      {part.name} {part.exercises}
-    </p>
-  );
-};
-
 const Total = ({ parts }) => {
   return (
     <p>
       Number of exercises{" "}
       {parts.reduce((prev, curr) => prev + curr.exercises, 0)}
+    </p>
+  );
+};
+
+const Part = ({ part }) => {
+  return (
+    <p>
+      {part.name} {part.exercises}
     </p>
   );
 };
